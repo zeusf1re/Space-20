@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWST Mission Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="mission-control">
+        <div class="calculator">
+            <header class="calc-header">
+                <span>JWST // MIRI INSTRUMENT</span>
+                <div class="status-light"></div>
+            </header>
+
+            <div class="display">
+                <input type="text" id="result" value="0" readonly>
+            </div>
+
+            <div class="keypad">
+                <button class="btn func" onclick="clearResult()">CLR</button>
+                <button class="btn func" onclick="toggleSign()">+/-</button>
+                <button class="btn func" onclick="appendOp('%')">%</button>
+                <button class="btn op" onclick="appendOp('/')">/</button>
+
+                <button class="btn" onclick="appendDigit('7')">7</button>
+                <button class="btn" onclick="appendDigit('8')">8</button>
+                <button class="btn" onclick="appendDigit('9')">9</button>
+                <button class="btn op" onclick="appendOp('*')">×</button>
+
+                <button class="btn" onclick="appendDigit('4')">4</button>
+                <button class="btn" onclick="appendDigit('5')">5</button>
+                <button class="btn" onclick="appendDigit('6')">6</button>
+                <button class="btn op" onclick="appendOp('-')">−</button>
+
+                <button class="btn" onclick="appendDigit('1')">1</button>
+                <button class="btn" onclick="appendDigit('2')">2</button>
+                <button class="btn" onclick="appendDigit('3')">3</button>
+                <button class="btn op" onclick="appendOp('+')">+</button>
+
+                <button class="btn zero" onclick="appendDigit('0')">0</button>
+                <button class="btn" onclick="appendDigit('.')">.</button>
+                <button class="btn execute" onclick="calculate()">ENTER</button>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
