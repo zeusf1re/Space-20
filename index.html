@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWST Mission Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-section start">
+            <a href="about.html" class="nav-link">About Me</a>
+        </div>
+        <div class="nav-section center">
+            <a href="index.html" class="brand-logo">
+                <span class="icon">🔭</span> JWST <span class="gold-text">OPS</span>
+            </a>
+        </div>
+        <div class="nav-section end">
+            <a href="calc.html" class="nav-link">Calculator</a>
+            <a href="index.html" class="nav-link">Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-grid">
+        <section class="info-panel">
+            <div class="text-block">
+                <h1 class="hero-title">Scientific Program <span class="gold-text">Planning</span></h1>
+                <p class="hero-desc">
+                    Система автоматизированного распределения наблюдательного времени.
+                    Оптимизация режимов: <span class="highlight">Фотометрия</span>, 
+                    <span class="highlight">Спектроскопия</span>, 
+                    <span class="highlight">Коронография</span>.
+                </p>
+                <a href="calc.html" class="btn-primary">Запустить расчет &rarr;</a>
+            </div>
+
+  
+            <div class="system-status-container frame-style">
+                <header class="calc-header">
+                    <span>SYSTEM TELEMETRY</span>
+                    <div class="status-light main-indicator" id="mainStatus"></div>
+                </header>
+                <ul class="telemetry-list">
+                    <li>
+                        <span>OPTICS ALIGNMENT</span>
+                        <div class="status-light small" id="status-optics"></div>
+                    </li>
+                    <li>
+                        <span>MIRI COOLING</span>
+                        <div class="status-light small" id="status-miri"></div>
+                    </li>
+                    <li>
+                        <span>GUIDANCE SENSORS</span>
+                        <div class="status-light small" id="status-guidance"></div>
+                    </li>
+                    <li>
+                        <span>DATA DOWNLINK</span>
+                        <div class="status-light small blink" id="status-data"></div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+ 
+        <section class="visual-panel frame-style">
+            <header class="calc-header overlay-header">
+                <span>L2 ORBIT VIEW // LIVE FEED</span>
+                <span>CAM-01</span>
+            </header>
+            <img src=./img/main_webb.jpeg alt="JWST Telescope" class="hero-image">
+            <div class="scan-line"></div> 
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
