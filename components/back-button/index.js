@@ -4,7 +4,11 @@ export class BackButtonComponent {
     }
 
     getHTML() {
-        return `<button id="back-button" class="btn btn-secondary mt-3" type="button">← Назад</button>`;
+        return `
+            <button class="btn btn-primary back-btn" type="button" id="back-button">
+                ← Назад к телескопам
+            </button>
+        `;
     }
 
     addListeners(listener) {
@@ -12,8 +16,7 @@ export class BackButtonComponent {
     }
 
     render(listener) {
-        const html = this.getHTML();
-        this.parent.insertAdjacentHTML('beforeend', html);
+        this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         this.addListeners(listener);
     }
 }

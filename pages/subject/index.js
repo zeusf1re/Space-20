@@ -1,6 +1,4 @@
-import { BackButtonComponent } from '../../components/back-button/index.js';
 import { SubjectDetailComponent } from '../../components/subject-detail/index.js';
-import { CarouselComponent } from '../../components/carousel/index.js';
 import { MainPage } from '../main/index.js';
 
 export class SubjectPage {
@@ -9,68 +7,49 @@ export class SubjectPage {
         this.id = id;
     }
 
-    get pageRoot() {
-        return document.getElementById('subject-page');
-    }
-
-    getHTML() {
-        return `<div id="subject-page"></div>`;
-    }
-
     getData() {
-    
-        const allSubjects = [
-            { id: 1, title: 'Математика', fullDescription: '...', teacher: 'Иванов И.И.', hoursPerWeek: 4, mainImage: '...', gallery: [...] },
-            // ...
-        ];
-        const subjects = [
-            {
-                id: 1,
-                title: 'Математика',
-                shortDescription: 'Алгебра, геометрия, математический анализ.',
-                fullDescription: 'Изучение математических структур, решение уравнений, работа с функциями, интегралы и производные.',
-                image: 'https://picsum.photos/id/20/300/200',
-                mainImage: 'https://picsum.photos/id/20/400/300',
-                teacher: 'Иванов И.И.',
-                hoursPerWeek: 4,
-                gallery: [
-                    'https://picsum.photos/id/20/800/400',
-                    'https://picsum.photos/id/21/800/400',
-                    'https://picsum.photos/id/22/800/400'
+        const telescopes = {
+            1: {
+                name: 'James Webb Space Telescope',
+                description: 'Наиболее мощный космический телескоп на текущий момент. Изучает формирование первых галактик, экзопланеты и черные дыры в инфракрасном диапазоне.',
+                modes: ['Спектроскопия', 'Фотометрия', 'Коронография'],
+                priority: 1,
+                mirrorSize: 6.5,
+                launchYear: 2021,
+                images: [
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/JWST_artist%27s_rendering_%28wide_shot%29_2021.jpg/800px-JWST_artist%27s_rendering_%28wide_shot%29_2021.jpg',
+                    'https://www.nasa.gov/wp-content/uploads/2021/11/jwst-mirrors.jpg',
+                    'https://www.jwst.nasa.gov/assets/images/content/1-full_assembly_sm.jpg'
                 ]
             },
-            {
-                id: 2,
-                title: 'Физика',
-                shortDescription: 'Механика, термодинамика, оптика.',
-                fullDescription: 'Изучение законов природы, решение задач по кинематике, динамике, электричеству и магнетизму.',
-                image: 'https://picsum.photos/id/24/300/200',
-                mainImage: 'https://picsum.photos/id/24/400/300',
-                teacher: 'Петров П.П.',
-                hoursPerWeek: 3,
-                gallery: [
-                    'https://picsum.photos/id/24/800/400',
-                    'https://picsum.photos/id/25/800/400',
-                    'https://picsum.photos/id/26/800/400'
+            2: {
+                name: 'Hubble Space Telescope',
+                description: 'Первый крупный оптический телескоп в космосе. Сделал революцию в астрономии, открыв тысячи новых объектов.',
+                modes: ['Фотометрия', 'Спектроскопия'],
+                priority: 2,
+                mirrorSize: 2.4,
+                launchYear: 1990,
+                images: [
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Hubble_Space_Telescope_HST_SM4_1_new_small.jpg/800px-Hubble_Space_Telescope_HST_SM4_1_new_small.jpg',
+                    'https://hubblesite.org/files/live/sites/hubble/files/home/_images/about-hubble/hubble-space-telescope/header.jpg',
+                    'https://www.nasa.gov/wp-content/uploads/2021/05/hubble-servicing-missions.jpg'
                 ]
             },
-            {
-                id: 3,
-                title: 'Информатика',
-                shortDescription: 'Программирование, алгоритмы, базы данных.',
-                fullDescription: 'Основы программирования на Python, структуры данных, работа с базами данных, веб-технологии.',
-                image: 'https://picsum.photos/id/0/300/200',
-                mainImage: 'https://picsum.photos/id/0/400/300',
-                teacher: 'Сидоров С.С.',
-                hoursPerWeek: 5,
-                gallery: [
-                    'https://picsum.photos/id/0/800/400',
-                    'https://picsum.photos/id/1/800/400',
-                    'https://picsum.photos/id/2/800/400'
+            3: {
+                name: 'Euclid Space Telescope',
+                description: 'Европейский телескоп для картирования миллиарда галактик и изучения темной энергии.',
+                modes: ['Фотометрия', 'Спектроскопия'],
+                priority: 3,
+                mirrorSize: 1.2,
+                launchYear: 2023,
+                images: [
+                    'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2022/07/euclid_space_telescope_artist_s_impression/24353991-1-eng-GB/Euclid_space_telescope_artist_s_impression_pillars.jpg',
+                    'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2021/11/euclid/23289141-1-eng-GB/Euclid_pillars.jpg',
+                    'https://euclidcalibration.org/wp-content/uploads/2023/07/Euclid-spacecraft.jpg'
                 ]
             }
-        ];
-        return subjects.find(subject => subject.id == this.id);
+        };
+        return telescopes[this.id] || telescopes[1];
     }
 
     clickBack() {
@@ -78,27 +57,20 @@ export class SubjectPage {
         mainPage.render();
     }
 
+    get pageRoot() {
+        return document.getElementById('subject-detail-root');
+    }
+
+    getHTML() {
+        return `<div id="subject-detail-root" class="min-vh-100"></div>`;
+    }
+
     render() {
         this.parent.innerHTML = '';
-        const html = this.getHTML();
-        this.parent.insertAdjacentHTML('beforeend', html);
+        this.parent.insertAdjacentHTML('beforeend', this.getHTML());
 
         const data = this.getData();
-        if (!data) {
-            this.parent.insertAdjacentHTML('beforeend', '<p>Предмет не найден</p>');
-            return;
-        }
-
-        // back button
-        const backButton = new BackButtonComponent(this.pageRoot);
-        backButton.render(this.clickBack.bind(this));
-
-        // detailde inf
-        const detail = new SubjectDetailComponent(this.pageRoot);
-        detail.render(data);
-
-        // carousel
-        const carousel = new CarouselComponent(this.pageRoot);
-        carousel.render(data.gallery);
+        const detail = new SubjectDetailComponent(this.pageRoot, data);
+        detail.render(this.clickBack.bind(this));
     }
 }
