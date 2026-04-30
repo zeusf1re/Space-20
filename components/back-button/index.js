@@ -1,22 +1,14 @@
-export class BackButtonComponent {
-    constructor(parent) {
-        this.parent = parent;
-    }
-
-    getHTML() {
-        return `
-            <button class="btn btn-primary back-btn" type="button" id="back-button">
-                ← Назад к телескопам
-            </button>
-        `;
-    }
-
-    addListeners(listener) {
-        document.getElementById('back-button').addEventListener('click', listener);
-    }
-
-    render(listener) {
-        this.parent.insertAdjacentHTML('beforeend', this.getHTML());
-        this.addListeners(listener);
-    }
+export default class BackButton {
+  render() {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.style.marginBottom = '20px';
+    btn.innerHTML = '← НАЗАД К СПИСКУ';
+    
+    btn.addEventListener('click', () => {
+      window.location.hash = '';
+    });
+    
+    return btn;
+  }
 }
