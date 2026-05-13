@@ -25,6 +25,11 @@ class App {
     const appEl = document.getElementById('app');
     appEl.innerHTML = '';
     appEl.appendChild(page.render());
+    
+    // <-- добавлено: запуск 3D после рендера
+    if (typeof page.initThreeJS === 'function') {
+      page.initThreeJS();
+    }
   }
 }
 
