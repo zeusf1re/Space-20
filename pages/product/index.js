@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { updateProgram, deleteProgram } from '../../services/storage.js';
 
 export default class ProductDetail {
   constructor(program) {
-    this.program = program;
-    this.threeInitialized = false; // чтобы не запускать сцену дважды
+    this.program = program; // program уже содержит id и все поля
+    this.threeInitialized = false;
   }
 
   render() {
@@ -14,26 +15,16 @@ export default class ProductDetail {
     container.style.width = '55%';
     container.style.margin = '0 auto';
 
-    const modeDisplay = {
-      photometry: 'Фотометрия',
-      spectroscopy: 'Спектроскопия',
-      coronography: 'Коронография'
-    };
-
     container.innerHTML = `
       <div class="calc-header">
         <span>✦ РЕДАКТИРОВАНИЕ ПРОГРАММЫ</span>
         <span class="status-light ok"></span>
       </div>
-      
-      <!-- 3D-контейнер вместо картинки -->
- <div id="threejs-container" style="width:60%; height:220px; 
-     border-radius:4px; border:1px solid var(--border); 
-     overflow:hidden; margin:20px auto;">
-</div>     
-
+      <div id="threejs-container" style="width:60%; height:220px; 
+           border-radius:4px; border:1px solid var(--border); 
+           overflow:hidden; margin:20px auto;">
+      </div>
       <form style="margin-top:20px;">
-        <!-- остальная форма без изменений -->
         <div class="form-group">
           <label>Режим наблюдения</label>
           <select name="mode" required>
@@ -56,15 +47,46 @@ export default class ProductDetail {
         </div>
         <div style="display:flex; gap:12px; margin-top:24px;">
           <button type="submit" class="btn execute">СОХРАНИТЬ</button>
-          <button type="button" class="btn delete-btn">УДАЛИТЬ</button>
+          <button type="button" class="btn delete-btn" id="deleteBtn">УДАЛИТЬ</button>
         </div>
       </form>
     `;
 
+    // Обработчики событий
+    const form = container.querySelector('form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const updated = {
+        id: this.program.id,
+        mode: formData.get('mode'),
+        target: formData.get('target'),
+        priority: parseInt(formData.get('priority')),
+        exposureTime: parseInt(formData.get('exposure'))
+      };
+      try {
+        await updateProgram(updated);
+        window.location.hash = ''; // возвращаемся на главную
+      } catch (err) {
+        console.error('Ошибка обновления:', err);
+      }
+    });
+
+    const deleteBtn = container.querySelector('#deleteBtn');
+    deleteBtn.addEventListener('click', async () => {
+      if (confirm('Удалить программу?')) {
+        try {
+          await deleteProgram(this.program.id);
+          window.location.hash = '';
+        } catch (err) {
+          console.error('Ошибка удаления:', err);
+        }
+      }
+    });
+
     return container;
   }
 
-  // Запуск Three.js – нужно вызвать ПОСЛЕ того, как контейнер добавлен в DOM
 initThreeJS() {
   if (this.threeInitialized) return;
   const container = document.getElementById('threejs-container');
@@ -143,4 +165,5 @@ initThreeJS() {
 
   this.threeInitialized = true;
 }
+
 }

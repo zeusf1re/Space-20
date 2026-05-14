@@ -1,11 +1,12 @@
 import MainPage from './pages/main/index.js';
-import ProductPage from './pages/product/index.js';
+import ProductDetail from './pages/product/index.js';
+import { getProgramById } from './services/storage.js';
 
 class App {
   constructor() {
     this.routes = {
       '': MainPage,
-      'product': ProductPage
+      'product': ProductDetail
     };
     this.init();
   }
@@ -15,20 +16,41 @@ class App {
     this.handleRoute();
   }
 
-  handleRoute() {
-    const hash = window.location.hash.slice(1) || '';
+  async handleRoute() {
+    const hash = window.location.hash.slice(1) || ''; // например, "" или "product/1001"
     const [route, param] = hash.split('/');
-    
-    const PageComponent = this.routes[route] || MainPage;
-    const page = new PageComponent(param);
-    
+
     const appEl = document.getElementById('app');
     appEl.innerHTML = '';
-    appEl.appendChild(page.render());
-    
-    // <-- добавлено: запуск 3D после рендера
-    if (typeof page.initThreeJS === 'function') {
-      page.initThreeJS();
+
+    try {
+      if (route === '' || route === 'main') {
+        // Главная страница
+        const page = new MainPage();
+        await page.init();          // асинхронная загрузка данных
+        appEl.appendChild(page.render());
+      } else if (route === 'product' && param) {
+        // Страница товара
+        const id = parseInt(param);
+        const program = await getProgramById(id);
+        if (!program) {
+          appEl.innerHTML = '<div class="frame-style"><p>Программа не найдена</p></div>';
+          return;
+        }
+        const page = new ProductDetail(program);
+        appEl.appendChild(page.render());
+        if (typeof page.initThreeJS === 'function') {
+          page.initThreeJS();
+        }
+      } else {
+        // Неизвестный маршрут – покажем главную
+        const page = new MainPage();
+        await page.init();
+        appEl.appendChild(page.render());
+      }
+    } catch (error) {
+      console.error('Ошибка маршрутизации:', error);
+      appEl.innerHTML = '<div class="frame-style"><p>Ошибка загрузки</p></div>';
     }
   }
 }

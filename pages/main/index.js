@@ -1,9 +1,25 @@
 import ProductCard from '../../components/product-card/index.js';
-import { getPrograms, addProgram } from '../../services/storage.js';
+import { getPrograms, addProgram, getRandomImage } from '../../services/storage.js';
 
 export default class MainPage {
   constructor() {
-    this.programs = getPrograms();
+    this.programs = [];
+    this.loaded = false;
+  }
+
+  // Асинхронная инициализация — загрузка данных с сервера
+  async init() {
+    await this.loadPrograms();
+    this.loaded = true;
+  }
+
+  async loadPrograms(filters = {}) {
+    try {
+      this.programs = await getPrograms(filters);
+    } catch (error) {
+      console.error('Ошибка загрузки программ:', error);
+      this.programs = [];
+    }
   }
 
   render() {
@@ -13,7 +29,6 @@ export default class MainPage {
     const wrapper = document.createElement('div');
     wrapper.style.maxWidth = '1200px';
     wrapper.style.width = '100%';
-    
 
     const header = document.createElement('div');
     header.className = 'calc-header';
@@ -23,14 +38,16 @@ export default class MainPage {
       <span class="status-light ok"></span>
     `;
     wrapper.appendChild(header);
-    
-    
 
+    // Форма добавления
     const form = this.createAddForm();
     wrapper.appendChild(form);
-    
 
+    // Панель фильтров (необязательно, но добавим для демонстрации)
+    const filterBar = this.createFilterBar();
+    wrapper.appendChild(filterBar);
 
+    // Сетка карточек
     const grid = document.createElement('div');
     grid.className = 'cards-grid';
     
@@ -40,6 +57,9 @@ export default class MainPage {
       </div>`;
     } else {
       this.programs.forEach(program => {
+        if (!program.image) {
+          program.image = getRandomImage();
+        }
         const card = new ProductCard(program);
         grid.appendChild(card.render());
       });
@@ -82,22 +102,88 @@ export default class MainPage {
       </div>
     `;
     
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
       const newProgram = {
-        id: Date.now() + Math.floor(Math.random() * 1000),
         mode: formData.get('mode'),
         target: formData.get('target'),
         priority: parseInt(formData.get('priority')),
         exposureTime: parseInt(formData.get('exposure'))
       };
       
-      addProgram(newProgram);
-      window.location.reload();
+      try {
+        await addProgram(newProgram);
+        await this.loadPrograms(); // перезагружаем список с сервера
+        this.rerender();
+      } catch (error) {
+        console.error('Ошибка добавления:', error);
+      }
     });
 
-    
     return form;
+  }
+
+  createFilterBar() {
+    const div = document.createElement('div');
+    div.className = 'frame-style';
+    div.style.marginBottom = '20px';
+    div.innerHTML = `
+      <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+        <div class="form-group" style="min-width:150px;">
+          <label>Режим</label>
+          <select id="filterMode">
+            <option value="">Все</option>
+            <option value="photometry">Фотометрия</option>
+            <option value="spectroscopy">Спектроскопия</option>
+            <option value="coronography">Коронография</option>
+          </select>
+        </div>
+        <div class="form-group" style="min-width:100px;">
+          <label>Приоритет</label>
+          <input type="number" id="filterPriority" min="1" max="3" placeholder="1-3">
+        </div>
+        <div class="form-group" style="min-width:150px;">
+          <label>Объект (поиск)</label>
+          <input type="text" id="filterTarget" placeholder="Часть названия">
+        </div>
+        <button type="button" id="applyFilterBtn" class="btn execute">Применить</button>
+        <button type="button" id="resetFilterBtn" class="btn">Сброс</button>
+      </div>
+    `;
+
+    // Навешиваем обработчики после добавления в DOM
+    setTimeout(() => {
+      const applyBtn = document.getElementById('applyFilterBtn');
+      const resetBtn = document.getElementById('resetFilterBtn');
+      if (applyBtn) {
+        applyBtn.addEventListener('click', async () => {
+          const filters = {
+            mode: document.getElementById('filterMode').value,
+            priority: document.getElementById('filterPriority').value,
+            target: document.getElementById('filterTarget').value
+          };
+          await this.loadPrograms(filters);
+          this.rerender();
+        });
+      }
+      if (resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+          document.getElementById('filterMode').value = '';
+          document.getElementById('filterPriority').value = '';
+          document.getElementById('filterTarget').value = '';
+          await this.loadPrograms();
+          this.rerender();
+        });
+      }
+    }, 0);
+
+    return div;
+  }
+
+  rerender() {
+    const appEl = document.getElementById('app');
+    appEl.innerHTML = '';
+    appEl.appendChild(this.render());
   }
 }
