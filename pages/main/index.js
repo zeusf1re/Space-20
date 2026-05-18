@@ -128,29 +128,31 @@ export default class MainPage {
     const div = document.createElement('div');
     div.className = 'frame-style';
     div.style.marginBottom = '20px';
-    div.innerHTML = `
-      <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
-        <div class="form-group" style="min-width:150px;">
-          <label>Режим</label>
-          <select id="filterMode">
-            <option value="">Все</option>
-            <option value="photometry">Фотометрия</option>
-            <option value="spectroscopy">Спектроскопия</option>
-            <option value="coronography">Коронография</option>
-          </select>
-        </div>
-        <div class="form-group" style="min-width:100px;">
-          <label>Приоритет</label>
-          <input type="number" id="filterPriority" min="1" max="3" placeholder="1-3">
-        </div>
-        <div class="form-group" style="min-width:150px;">
-          <label>Объект (поиск)</label>
-          <input type="text" id="filterTarget" placeholder="Часть названия">
-        </div>
-        <button type="button" id="applyFilterBtn" class="btn execute">Применить</button>
-        <button type="button" id="resetFilterBtn" class="btn">Сброс</button>
-      </div>
-    `;
+div.innerHTML = `
+  <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+    <div class="form-group" style="min-width:150px;">
+      <label>Режим</label>
+      <select id="filterMode">
+        <option value="">Все</option>
+        <option value="photometry">Фотометрия</option>
+        <option value="spectroscopy">Спектроскопия</option>
+        <option value="coronography">Коронография</option>
+      </select>
+    </div>
+    <div class="form-group" style="min-width:100px;">
+      <label>Приоритет</label>
+      <input type="number" id="filterPriority" min="1" max="3" placeholder="1-3">
+    </div>
+    <div class="form-group" style="min-width:300px;">
+      <label>Объект (поиск)</label>
+      <input type="text" id="filterTarget" placeholder="Часть названия">
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 10px; align-items: flex-end;">
+      <button type="button" id="applyFilterBtn" class="btn execute">Применить</button>
+      <button type="button" id="resetFilterBtn" class="btn">Сброс</button>
+    </div>
+  </div>
+`;
 
     // Навешиваем обработчики после добавления в DOM
     setTimeout(() => {

@@ -1,7 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
 const app = express();
 const PORT = 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'programs.json');
@@ -52,7 +51,7 @@ app.get('/api/programs/:id', (req, res) => {
   res.json(program);
 });
 
-// 3. POST /api/programs — добавление
+// 3. POST /api/programs
 app.post('/api/programs', (req, res) => {
   const programs = readPrograms();
   const { mode, target, priority, exposureTime } = req.body;
@@ -71,7 +70,7 @@ app.post('/api/programs', (req, res) => {
   res.status(201).json(newProgram);
 });
 
-// 4. PUT /api/programs/:id — редактирование
+// 4. PUT /api/programs/:id
 app.put('/api/programs/:id', (req, res) => {
   const programs = readPrograms();
   const index = programs.findIndex(p => p.id === parseInt(req.params.id));
@@ -83,16 +82,20 @@ app.put('/api/programs/:id', (req, res) => {
   res.json(updated);
 });
 
-// 5. DELETE /api/programs/:id — удаление
-app.delete('/api/programs/:id', (req, res) => {
+// ?exposureTime_lte=50
+app.delete('/api/programs', (req, res) => {
+  const maxTime = parseInt(req.query.maxExposureTime);
+  if (!maxTime) {
+    return res.status(400).json({ error: 'Укажите параметр maxExposureTime (число)' });
+  }
   let programs = readPrograms();
-  const initialLength = programs.length;
-  programs = programs.filter(p => p.id !== parseInt(req.params.id));
-  if (programs.length === initialLength) return res.status(404).json({ error: 'Программа не найдена' });
+  const beforeCount = programs.length;
+  programs = programs.filter(p => p.exposureTime > maxTime);
+  const deletedCount = beforeCount - programs.length;
   writePrograms(programs);
-  res.json({ message: 'Программа удалена' });
+  res.json({ deleted: deletedCount, remaining: programs.length });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен: http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

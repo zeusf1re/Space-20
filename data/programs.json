@@ -1,16 +1,16 @@
 [
   {
-    "id": 1002,
-    "mode": "spectroscopy",
-    "target": "Галактика Андромеды",
+    "id": 1778773852473,
+    "mode": "spectography",
+    "target": "example2",
     "priority": 2,
-    "exposureTime": 120
+    "exposureTime": 123124
   },
   {
-    "id": 1003,
-    "mode": "coronography",
-    "target": "TRAPPIST-1",
-    "priority": 3,
+    "id": 1779119548029,
+    "mode": "photometry",
+    "target": "123",
+    "priority": 2,
     "exposureTime": 30
   }
 ]
