@@ -21,7 +21,7 @@ if (!fs.existsSync(DATA_FILE)) {
 }
 
 app.use(express.json());
-app.use(express.static(__dirname)); // отдаём все файлы из корня как статику
+app.use(express.static(path.join(__dirname, 'public')));   // <-- изменено
 
 // Вспомогательные функции
 function readPrograms() {
@@ -82,7 +82,7 @@ app.put('/api/programs/:id', (req, res) => {
   res.json(updated);
 });
 
-// ?exposureTime_lte=50
+// 5. DELETE /api/programs
 app.delete('/api/programs', (req, res) => {
   const maxTime = parseInt(req.query.maxExposureTime);
   if (!maxTime) {
@@ -94,6 +94,12 @@ app.delete('/api/programs', (req, res) => {
   const deletedCount = beforeCount - programs.length;
   writePrograms(programs);
   res.json({ deleted: deletedCount, remaining: programs.length });
+});
+
+// Fallback для SPA – отдаём index.html при любом не-API запросе
+// Fallback для SPA: отдаём index.html, если запрос не подошёл ни к одному маршруту
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {

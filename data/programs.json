@@ -12,5 +12,12 @@
     "target": "123",
     "priority": 2,
     "exposureTime": 30
+  },
+  {
+    "id": 1780270017498,
+    "mode": "photometry",
+    "target": "123123",
+    "priority": 2,
+    "exposureTime": 30
   }
 ]
