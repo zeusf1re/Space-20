@@ -7,7 +7,7 @@ export default class MainPage {
     this.loaded = false;
   }
 
-  // Асинхронная инициализация — загрузка данных с сервера
+  
   async init() {
     await this.loadPrograms();
     this.loaded = true;
@@ -39,15 +39,15 @@ export default class MainPage {
     `;
     wrapper.appendChild(header);
 
-    // Форма добавления
+    
     const form = this.createAddForm();
     wrapper.appendChild(form);
 
-    // Панель фильтров (необязательно, но добавим для демонстрации)
+    
     const filterBar = this.createFilterBar();
     wrapper.appendChild(filterBar);
 
-    // Сетка карточек
+    
     const grid = document.createElement('div');
     grid.className = 'cards-grid';
     
@@ -114,7 +114,7 @@ export default class MainPage {
       
       try {
         await addProgram(newProgram);
-        await this.loadPrograms(); // перезагружаем список с сервера
+        await this.loadPrograms(); 
         this.rerender();
       } catch (error) {
         console.error('Ошибка добавления:', error);
@@ -154,7 +154,7 @@ div.innerHTML = `
   </div>
 `;
 
-    // Навешиваем обработчики после добавления в DOM
+    
     setTimeout(() => {
       const applyBtn = document.getElementById('applyFilterBtn');
       const resetBtn = document.getElementById('resetFilterBtn');

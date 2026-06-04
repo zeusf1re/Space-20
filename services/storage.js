@@ -1,7 +1,7 @@
-// services/storage.js
+
 const API_BASE = '/api/programs';
 
-// Вспомогательный список картинок (оставляем как было)
+
 const TELESCOPE_IMAGES = [
   './imgs/img1.jpeg',
   './imgs/img2.jpeg',
@@ -12,7 +12,7 @@ export function getRandomImage() {
   return TELESCOPE_IMAGES[Math.floor(Math.random() * TELESCOPE_IMAGES.length)];
 }
 
-// Получить все программы (можно с фильтрами)
+
 export async function getPrograms(filters = {}) {
   const params = new URLSearchParams();
   if (filters.mode) params.append('mode', filters.mode);
@@ -25,14 +25,14 @@ export async function getPrograms(filters = {}) {
   return response.json();
 }
 
-// Получить одну программу по id
+
 export async function getProgramById(id) {
   const response = await fetch(`${API_BASE}/${id}`);
   if (!response.ok) throw new Error('Программа не найдена');
   return response.json();
 }
 
-// Добавить программу
+
 export async function addProgram(program) {
   const response = await fetch(API_BASE, {
     method: 'POST',
@@ -43,7 +43,7 @@ export async function addProgram(program) {
   return response.json();
 }
 
-// Обновить программу
+
 export async function updateProgram(program) {
   const response = await fetch(`${API_BASE}/${program.id}`, {
     method: 'PUT',
@@ -54,7 +54,7 @@ export async function updateProgram(program) {
   return response.json();
 }
 
-// Удалить программу
+
 export async function deleteProgram(id) {
   const response = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE'

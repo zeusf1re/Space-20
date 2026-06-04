@@ -16,7 +16,8 @@
 
 * Ход работы
 ** Часть 1. Переход на fetch
-Исходный код использовал XMLHttpRequest (или прямые импорты данных). В файле =services/storage.js= все функции были переписаны с использованием =fetch= и =async/await=:
+Исходный код использовал XMLHttpRequest (или прямые импорты данных).
+В файле =services/storage.js= все функции были переписаны с использованием =fetch= и =async/await=:
 - =getPrograms= – GET-запрос с возможностью фильтрации через query-параметры.
 - =getProgramById= – GET-запрос по id.
 - =addProgram= – POST-запрос с телом в формате JSON.

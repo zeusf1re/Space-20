@@ -17,7 +17,7 @@ class App {
   }
 
   async handleRoute() {
-    const hash = window.location.hash.slice(1) || ''; // например, "" или "product/1001"
+    const hash = window.location.hash.slice(1) || ''; 
     const [route, param] = hash.split('/');
 
     const appEl = document.getElementById('app');
@@ -25,12 +25,12 @@ class App {
 
     try {
       if (route === '' || route === 'main') {
-        // Главная страница
+        
         const page = new MainPage();
-        await page.init();          // асинхронная загрузка данных
+        await page.init();          
         appEl.appendChild(page.render());
       } else if (route === 'product' && param) {
-        // Страница товара
+        
         const id = parseInt(param);
         const program = await getProgramById(id);
         if (!program) {
@@ -43,7 +43,7 @@ class App {
           page.initThreeJS();
         }
       } else {
-        // Неизвестный маршрут – покажем главную
+        
         const page = new MainPage();
         await page.init();
         appEl.appendChild(page.render());

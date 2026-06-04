@@ -7,7 +7,7 @@ import { updateProgram, deleteProgram } from '../../services/storage.js';
 
 export default class ProductDetail {
   constructor(program) {
-    this.program = program; // program уже содержит id и все поля
+    this.program = program; 
     this.threeInitialized = false;
   }
 
@@ -54,7 +54,7 @@ export default class ProductDetail {
       </form>
     `;
 
-    // Обработчики событий
+    
     const form = container.querySelector('form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -68,7 +68,7 @@ export default class ProductDetail {
       };
       try {
         await updateProgram(updated);
-        window.location.hash = ''; // возвращаемся на главную
+        window.location.hash = ''; 
       } catch (err) {
         console.error('Ошибка обновления:', err);
       }
@@ -114,31 +114,31 @@ initThreeJS() {
   renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
-  // --- OrbitControls ---
+  
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.rotateSpeed = 0.5;
   controls.enableZoom = true;
   controls.zoomSpeed = 1.2;
-  controls.enablePan = false;       // отключаем перемещение, только вращение
+  controls.enablePan = false;       
   controls.target.set(0, 0, 0);
   controls.update();
 
-  // --- свет ---
+  
   const ambientLight = new THREE.AmbientLight(0x404040, 2);
   scene.add(ambientLight);
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(1, 3, 1);
   scene.add(directionalLight);
 
-  // --- загрузка модели ---
+  
   const loader = new GLTFLoader();
   loader.load(
     './models/telescope.glb',
     (gltf) => {
       const model = gltf.scene;
-        model.scale.set(0.2, 0.2, 0.2);   // твой подходящий масштаб
+        model.scale.set(0.2, 0.2, 0.2);   
       model.position.set(0, 0, 0);
       scene.add(model);
       console.log('Модель загружена');
@@ -147,7 +147,7 @@ initThreeJS() {
     (error) => console.error('Ошибка загрузки модели:', error)
   );
 
-  // --- анимация (только контролы, без автовращения) ---
+  
   const animate = () => {
     requestAnimationFrame(animate);
     controls.update();
@@ -155,7 +155,7 @@ initThreeJS() {
   };
   animate();
 
-  // --- ресайз ---
+  
   window.addEventListener('resize', () => {
     const w = container.clientWidth;
     const h = container.clientHeight;
