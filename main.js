@@ -39,16 +39,7 @@ class App {
         }
         const page = new ProductDetail(program);
         appEl.appendChild(page.render());
-        if (typeof page.initThreeJS === 'function') {
-          page.initThreeJS();
-        }
-      } else {
-        // Неизвестный маршрут – покажем главную
-        const page = new MainPage();
-        await page.init();
-        appEl.appendChild(page.render());
-      }
-    } catch (error) {
+      }} catch (error) {
       console.error('Ошибка маршрутизации:', error);
       appEl.innerHTML = '<div class="frame-style"><p>Ошибка загрузки</p></div>';
     }

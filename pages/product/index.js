@@ -1,12 +1,14 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+//import * as THREE from 'three';
+//import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+//import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { updateProgram, deleteProgram } from '../../services/storage.js';
 
 export default class ProductDetail {
   constructor(program) {
     this.program = program; // program уже содержит id и все поля
-    this.threeInitialized = false;
+//    this.threeInitialized = false;
   }
 
   render() {
@@ -19,10 +21,6 @@ export default class ProductDetail {
       <div class="calc-header">
         <span>✦ РЕДАКТИРОВАНИЕ ПРОГРАММЫ</span>
         <span class="status-light ok"></span>
-      </div>
-      <div id="threejs-container" style="width:60%; height:220px; 
-           border-radius:4px; border:1px solid var(--border); 
-           overflow:hidden; margin:20px auto;">
       </div>
       <form style="margin-top:20px;">
         <div class="form-group">
@@ -87,83 +85,5 @@ export default class ProductDetail {
     return container;
   }
 
-initThreeJS() {
-  if (this.threeInitialized) return;
-  const container = document.getElementById('threejs-container');
-  if (!container) {
-    console.error('Контейнер для 3D не найден');
-    return;
-  }
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x111122);
-
-  const camera = new THREE.PerspectiveCamera(
-    45,
-    container.clientWidth / container.clientHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(4, 2, 5);
-  camera.lookAt(0, 0, 0);
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  container.appendChild(renderer.domElement);
-
-  // --- OrbitControls ---
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.rotateSpeed = 0.5;
-  controls.enableZoom = true;
-  controls.zoomSpeed = 1.2;
-  controls.enablePan = false;       // отключаем перемещение, только вращение
-  controls.target.set(0, 0, 0);
-  controls.update();
-
-  // --- свет ---
-  const ambientLight = new THREE.AmbientLight(0x404040, 2);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(1, 3, 1);
-  scene.add(directionalLight);
-
-  // --- загрузка модели ---
-  const loader = new GLTFLoader();
-  loader.load(
-    './models/telescope.glb',
-    (gltf) => {
-      const model = gltf.scene;
-        model.scale.set(0.2, 0.2, 0.2);   // твой подходящий масштаб
-      model.position.set(0, 0, 0);
-      scene.add(model);
-      console.log('Модель загружена');
-    },
-    undefined,
-    (error) => console.error('Ошибка загрузки модели:', error)
-  );
-
-  // --- анимация (только контролы, без автовращения) ---
-  const animate = () => {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  };
-  animate();
-
-  // --- ресайз ---
-  window.addEventListener('resize', () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    if (w === 0 || h === 0) return;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  });
-
-  this.threeInitialized = true;
-}
 
 }
